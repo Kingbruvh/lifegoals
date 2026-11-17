@@ -360,3 +360,47 @@ test("desktop visual smoke, image/font loading, keyboard and known deep links", 
   await expect(page.getByRole("dialog")).not.toBeVisible();
   expect(errors).toEqual([]);
 });
+test("new participant onboarding creates an account and opens Mijn Life Goals", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("link", { name: /Nieuw bij Life Goals/ }).click();
+  await page.getByRole("button", { name: "Ik doe mee" }).click();
+  await page.getByLabel("Je naam").fill("Jesse Nieuw");
+  await page.getByRole("button", { name: "Verder" }).click();
+  await page.getByLabel("Je e-mailadres").fill("jesse@example.invalid");
+  await page.getByRole("button", { name: "Verder" }).click();
+  await page.getByRole("button", { name: /Je inlogcode is/ }).click();
+  await expect(
+    page.getByRole("heading", { name: /Welkom in het team/ }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Naar mijn Life Goals" }).click();
+  await expect(page.getByRole("heading", { name: "Hé Jesse!" })).toBeVisible();
+  const d = await state(page);
+  expect(
+    d.people.some((p: any) => p.email === "jesse@example.invalid"),
+  ).toBeTruthy();
+});
+test("live split-screen: coach phone updates the national dashboard", async ({
+  page,
+}) => {
+  await page.goto("/live");
+  const phone = page.frameLocator(
+    'iframe[title="Coach registreert aanwezigheid"]',
+  );
+  const desk = page.frameLocator('iframe[title="Landelijk dashboard"]');
+  const moments = desk
+    .locator(".stat")
+    .filter({ hasText: "Sportmomenten" })
+    .locator(".stat-value");
+  await expect(moments).toHaveText(/^\d+$/);
+  await expect(moments).not.toHaveText("0");
+  // Let the count-up animation settle before reading the value.
+  await page.waitForTimeout(1200);
+  const before = Number(await moments.textContent());
+  await phone
+    .getByRole("button", { name: "Samira El Amrani aanwezig", exact: true })
+    .click();
+  await expect(moments).toHaveText(String(before + 1));
+});

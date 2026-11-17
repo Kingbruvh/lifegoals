@@ -43,9 +43,8 @@ export function PersonalHome() {
   return (
     <div className="personal-content">
       <Heading
-        eyebrow="JOUW PLEK BIJ LIFE GOALS"
-        title={`Hé ${p.name.split(" ")[0]}, fijn dat je er bent.`}
-        subtitle="Op jouw tempo. Op jouw manier. Samen vooruit."
+        eyebrow="MIJN LIFE GOALS"
+        title={`Hé ${p.name.split(" ")[0]}!`}
       />
       <section className="personal-hero">
         <div>
@@ -56,11 +55,6 @@ export function PersonalHome() {
             <br />
             als jij <em>meedoet.</em>
           </h2>
-          <p>
-            Een nieuwe ervaring, een goed gesprek
-            <br />
-            of gewoon een fijn uur op het veld.
-          </p>
           <Link href="/mijn/activiteiten" className="button">
             Ontdek jouw volgende stap <ArrowUpRight size={17} />
           </Link>
@@ -69,7 +63,7 @@ export function PersonalHome() {
       </section>
       <div className="two-columns">
         <section className="card next-card">
-          <SectionTitle title="Binnenkort voor jou" />
+          <SectionTitle title="Binnenkort" />
           {a ? (
             <>
               <div className="next-date">
@@ -111,8 +105,7 @@ export function PersonalHome() {
               <BookOpen size={27} />
               <h2>{c.title}</h2>
               <p>
-                Je hebt {e.tasks.filter((t) => t === "done").length} onderdelen
-                afgerond. Elke stap telt.
+                {e.tasks.filter((t) => t === "done").length} onderdelen afgerond
               </p>
               <Progress value={progress(e)} />
             </>
@@ -134,11 +127,6 @@ export function PersonalHome() {
               ? "Ontdek waar jouw talent ligt."
               : "Geef jezelf een nieuwe ervaring."}
           </h2>
-          <p>
-            {e
-              ? "Bekijk je portfolio en bespreek je volgende opdracht met je opleider."
-              : "Er is altijd een activiteit of opleiding die bij je past."}
-          </p>
         </div>
         <Link
           href={e ? "/mijn/portfolio" : "/mijn/activiteiten"}
@@ -149,14 +137,10 @@ export function PersonalHome() {
       </section>
       <div className="two-columns">
         <section className="card">
-          <SectionTitle title="Kijk eens wat je al hebt gedaan" />
+          <SectionTitle title="Samen gesport" />
           <div className="personal-moments">
             <b>{moments}</b>
-            <span>
-              keer samen gesport.
-              <br />
-              En jouw verhaal gaat verder.
-            </span>
+            <span>keer erbij geweest</span>
           </div>
           <Link href="/mijn/reis" className="text-link">
             Bekijk jouw momenten <ArrowUpRight size={17} />
@@ -164,11 +148,7 @@ export function PersonalHome() {
         </section>
         <section className="card volunteer-teaser">
           <HeartHandshake size={25} />
-          <h2>Jouw hulp is welkom.</h2>
-          <p>
-            Help mee bij een sportevent. Nieuwe mensen, nieuwe ervaringen, en
-            een mooie dag samen.
-          </p>
+          <h2>Help mee bij een event.</h2>
           <Link href="/mijn/activiteiten/events" className="text-link">
             Ontdek waar je kunt helpen <ArrowUpRight size={17} />
           </Link>
@@ -199,9 +179,8 @@ export function Portfolio() {
   return (
     <div className="personal-content">
       <Heading
-        eyebrow="LEREN OP JOUW MANIER"
+        eyebrow="LEREN"
         title="Mijn leerreis"
-        subtitle="Wat je hebt geleerd. Wat nog komt. Allemaal op één plek."
         action={
           es.length > 1 && (
             <select
@@ -267,26 +246,19 @@ export function Portfolio() {
                   ? "Stap voor stap vooruit"
                   : "Alles overzichtelijk bij elkaar"
               }
-              subtitle="Je opleider werkt de voortgang samen met jou bij."
             />
             <TaskChecklist enrollment={e} />
           </>
         ) : tab === "Opdrachten" ? (
           <>
-            <SectionTitle
-              title="Jouw opdrachten"
-              subtitle="Generieke voorbeeldopdrachten voor deze conceptdemo"
-            />
+            <SectionTitle title="Jouw opdrachten" />
             <div className="assignment">
               <span className="course-icon">
                 <Flag size={23} />
               </span>
               <div>
                 <h2>Mijn talenten & een activiteit voorbereiden</h2>
-                <p>
-                  Bedenk wat jij leuk vindt om te doen. Beschrijf hoe je jouw
-                  talent kunt inzetten bij een sportactiviteit.
-                </p>
+                <p>Hoe zet jij jouw talent in bij een sportactiviteit?</p>
                 <Tag tone={e.tasks[6] === "done" ? "green" : ""}>
                   {e.tasks[6] === "done"
                     ? "Afgerond met je opleider"
@@ -294,29 +266,18 @@ export function Portfolio() {
                 </Tag>
               </div>
             </div>
-            <p className="fine">
-              In deze demo beoordeelt de opleider de opdracht in het portfolio.
-              Er worden geen bestanden of persoonlijke antwoorden verzameld.
-            </p>
           </>
         ) : tab === "Documenten" ? (
           <>
-            <SectionTitle
-              title="Jouw documenten"
-              subtitle="Een klein voorbeeld om mee te beginnen"
-            />
+            <SectionTitle title="Jouw documenten" />
             <a href="/voorbeeld-opdracht.txt" download className="document-row">
               <FileText size={24} />
               <div>
                 <h3>Mijn volgende stap</h3>
-                <p>Voorbeeldopdracht · tekstbestand · fictief</p>
+                <p>Voorbeeldopdracht</p>
               </div>
               <Download size={20} />
             </a>
-            <p className="fine">
-              Dit is een generiek voorbeeld, geen officieel Life Goals
-              startdocument of ondertekend dossier.
-            </p>
           </>
         ) : (
           <Journey personId={s.personId} />
@@ -331,11 +292,7 @@ export function Discover() {
   const p = s.data.people.find((p) => p.id === s.personId)!;
   return (
     <div className="personal-content">
-      <Heading
-        eyebrow="ONTMOETEN. ONTDEKKEN. MEEDOEN."
-        title="Wat wordt jouw volgende stap?"
-        subtitle="Je hoeft het niet alleen te doen. Ontdek wat bij jou past."
-      />
+      <Heading eyebrow="ONTDEK" title="Jouw volgende stap" />
       <div className="tabs detail-tabs">
         {["Sportactiviteiten", "Opleidingen", "Events & meehelpen"].map((t) => (
           <button
@@ -368,9 +325,8 @@ export function Discover() {
                       {a.schedule}
                     </p>
                     <p className="fine">
-                      Coach:{" "}
-                      {s.data.people.find((p) => p.id === a.coachId)!.name}.
-                      Iedereen is welkom; ervaring is niet nodig.
+                      Coach{" "}
+                      {s.data.people.find((p) => p.id === a.coachId)!.name}
                     </p>
                     <button
                       className={`button ${joined ? "success-button" : ""}`}

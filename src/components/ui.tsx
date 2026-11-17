@@ -21,34 +21,50 @@ export function Logo({ light = false }: { light?: boolean }) {
 export function Nebula({ className = "" }: { className?: string }) {
   return <span className={`nebula ${className}`} aria-hidden="true" />;
 }
-/** Counts a number (with optional suffix such as "%") up from zero once. */
+/** Counts a number (with optional suffix such as "%") to its value, and
+ *  animates from the previous value with a short highlight when it changes. */
 export function CountUp({ value }: { value: string | number }) {
   const match = String(value).match(/^(\d+)(.*)$/);
   const target = match ? Number(match[1]) : 0;
-  const [shown, setShown] = useState(match ? 0 : target);
+  const [shown, setShown] = useState(0);
+  const [bump, setBump] = useState(false);
+  const from = useRef(0);
+  const first = useRef(true);
   useEffect(() => {
     if (!match) return;
+    const start = from.current;
+    from.current = target;
+    if (!first.current && start !== target) {
+      setBump(true);
+      setTimeout(() => setBump(false), 900);
+    }
+    first.current = false;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setShown(target);
       return;
     }
     let frame = 0;
-    const start = performance.now();
+    const t0 = performance.now();
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / 900);
-      setShown(Math.round(target * (1 - Math.pow(1 - t, 3))));
+      const t = Math.min(1, (now - t0) / 900);
+      setShown(Math.round(start + (target - start) * (1 - Math.pow(1 - t, 3))));
       if (t < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
+    // Fallback: frames pause in background tabs, so always land on the value.
+    const settle = setTimeout(() => setShown(target), 950);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(settle);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [target]);
   if (!match) return <>{value}</>;
   return (
-    <>
+    <span className={bump ? "bump" : undefined}>
       {shown}
       {match[2]}
-    </>
+    </span>
   );
 }
 export function Avatar({ name, size = "" }: { name: string; size?: string }) {
@@ -174,28 +190,42 @@ export function Modal({
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
+  const [closing, setClosing] = useState(false);
   useEffect(() => {
     const node = ref.current;
     node?.showModal();
     return () => node?.close();
   }, []);
+  // Play the exit animation before the parent unmounts the dialog.
+  function dismiss() {
+    if (closing) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return close();
+    setClosing(true);
+    setTimeout(close, 200);
+  }
   return (
     <dialog
       ref={ref}
       aria-labelledby={titleId}
-      className="modal"
+      className={`modal ${closing ? "closing" : ""}`}
       onCancel={(e) => {
         e.preventDefault();
-        close();
+        dismiss();
       }}
       onClick={(e) => {
-        if (e.target === ref.current) close();
+        if (e.target === ref.current) dismiss();
       }}
     >
       <div className="modal-inner">
+        <span className="sheet-handle" aria-hidden="true" />
         <div className="section-title">
           <h2 id={titleId}>{title}</h2>
-          <button className="icon-button" onClick={close} aria-label="Sluiten">
+          <button
+            className="icon-button"
+            onClick={dismiss}
+            aria-label="Sluiten"
+          >
             <X size={20} />
           </button>
         </div>

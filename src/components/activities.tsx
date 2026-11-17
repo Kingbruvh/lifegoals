@@ -31,13 +31,8 @@ export function Activities({ coach = false }: { coach?: boolean }) {
   return (
     <>
       <Heading
-        eyebrow={coach ? "KLAAR VOOR HET VELD" : "ELKE WEEK EEN NIEUWE KANS"}
-        title={coach ? "Mijn activiteiten" : "Samen in beweging"}
-        subtitle={
-          coach
-            ? "Open een activiteit en registreer de aanwezigheid met één tik."
-            : "Wekelijkse sportactiviteiten die mensen bij elkaar brengen."
-        }
+        eyebrow={coach ? "OP HET VELD" : "ELKE WEEK"}
+        title={coach ? "Mijn activiteiten" : "Activiteiten"}
         action={
           !coach && (
             <RegionSelect
@@ -167,10 +162,7 @@ export function ActivityDetail({
         </div>
       </div>
       <section className="card attendance-card">
-        <SectionTitle
-          title="Wie is erbij?"
-          subtitle="Tik op aanwezig of afwezig. Je wijziging wordt direct opgeslagen."
-        />
+        <SectionTitle title="Wie is erbij?" />
         <input
           className="roster-search"
           aria-label="Zoek in deelnemerslijst"
@@ -237,10 +229,6 @@ export function ActivityDetail({
         {!people.filter((p) =>
           p.name.toLowerCase().includes(query.toLowerCase()),
         ).length && <Empty title="Geen deelnemers gevonden" />}
-        <p className="fine">
-          Aanwezigheid verschijnt ook in het deelnemersprofiel en de Life Goals
-          Monitor.
-        </p>
       </section>
     </>
   );
@@ -258,14 +246,13 @@ export function CoachHome() {
   return (
     <>
       <Heading
-        eyebrow="DINSDAG 3 NOVEMBER · DEMOWEEK"
+        eyebrow="DINSDAG 3 NOVEMBER"
         title="Hé Milan, klaar voor vandaag?"
-        subtitle="Jij brengt mensen bij elkaar. Wij houden het overzicht."
       />
       {a && (
         <section className="coach-feature">
           <Nebula className="hero-nebula" />
-          <Tag tone="cream">JOUW EERSTVOLGENDE ACTIVITEIT</Tag>
+          <Tag tone="cream">VANDAAG</Tag>
           <h2>{a.title}</h2>
           <p>
             <CalendarDays size={17} />
@@ -327,17 +314,9 @@ export function CoachHome() {
         </section>
         <section className="card volunteer-teaser">
           <HeartHandshake size={28} />
-          <h2>
-            Ook naast het veld
-            <br />
-            maak jij het verschil.
-          </h2>
-          <p>
-            Een extra paar handen, een warm welkom. Ontdek waar jij kunt
-            meehelpen.
-          </p>
+          <h2>Help mee bij een event.</h2>
           <Link href="/coach/events" className="text-link">
-            Ontdek vrijwilligerskansen <ArrowRightIcon />
+            Bekijk events <ArrowRightIcon />
           </Link>
         </section>
       </div>
@@ -362,15 +341,8 @@ export function Events({
   return (
     <>
       <Heading
-        eyebrow="MEEDOEN MAAKT HET VERSCHIL"
-        title={
-          personal ? "Samen iets moois neerzetten." : "Events & vrijwilligers"
-        }
-        subtitle={
-          personal
-            ? "Sport, ontmoet en help mee. Er is altijd een plek voor jou."
-            : "Een ontmoeting op het veld. Een helpende hand ernaast."
-        }
+        eyebrow="LIFE GOALS EVENTS"
+        title={personal ? "Doe mee of help mee" : "Events & vrijwilligers"}
       />
       <div className="events-list">
         {events.map((e, i) => {

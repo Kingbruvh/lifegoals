@@ -29,11 +29,9 @@ test("key desktop and mobile screens meet WCAG 2.1 AA automated checks", async (
       })),
     });
   }
-  await test
-    .info()
-    .attach("accessibility-report", {
-      body: JSON.stringify(reports, null, 2),
-      contentType: "application/json",
-    });
+  await test.info().attach("accessibility-report", {
+    body: JSON.stringify(reports, null, 2),
+    contentType: "application/json",
+  });
   expect(reports.flatMap((r) => r.violations)).toEqual([]);
 });

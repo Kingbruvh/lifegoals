@@ -59,13 +59,8 @@ export function CourseList({ trainer = false }: { trainer?: boolean }) {
   return (
     <>
       <Heading
-        eyebrow={trainer ? "LIFE GOALS ACADEMIE" : "RUIMTE OM TE GROEIEN"}
+        eyebrow={trainer ? "LIFE GOALS ACADEMIE" : "ACADEMIE"}
         title={trainer ? "Goedemorgen, Robin" : "Opleidingen"}
-        subtitle={
-          trainer
-            ? "Iedere deelnemer leert op zijn eigen tempo. Zo help jij de volgende stap mogelijk maken."
-            : "Van eerste aanmelding tot een volgende stap op het veld."
-        }
         action={
           !trainer && (
             <button className="button" onClick={() => setCreate(true)}>
@@ -201,7 +196,6 @@ function CourseForm({ close }: { close: () => void }) {
   }
   return (
     <Modal title="Een nieuwe opleiding" close={close}>
-      <p className="muted">Geef een nieuwe groep ruimte om te groeien.</p>
       <form onSubmit={submit} className="form-grid">
         <label className="field full">
           Titel van de opleiding
@@ -429,7 +423,6 @@ export function CourseDetail({
             readOnly
             onFocus={(e) => e.target.select()}
           />
-          <small>Demogegevens worden alleen in deze browser gedeeld.</small>
         </section>
       </div>
       <div className="tabs detail-tabs">
@@ -602,8 +595,7 @@ export function CourseDetail({
               </table>
             </div>
             <p className="fine padded">
-              Klik op een status om dit demo-onderdeel af te ronden of te
-              heropenen. Geen externe vragenlijsten of digitale ondertekening.
+              Klik op een status om die te wijzigen.
             </p>
           </>
         ) : (
@@ -632,10 +624,6 @@ export function CourseDetail({
                 <Tag>Voorbeeldbijeenkomst</Tag>
               </div>
             ))}
-            <p className="fine">
-              Sportaanwezigheid van deze deelnemers staat in hun profiel. Deze
-              opleidingsbijeenkomsten zijn illustratieve planningsonderdelen.
-            </p>
           </div>
         )}
       </section>
@@ -784,10 +772,6 @@ export function Registration({ courseId }: { courseId: string }) {
           >
             Terug naar de coördinator
           </Link>
-          <p className="fine">
-            Demo-aanmelding opgeslagen in deze browser. Er is geen e-mail
-            verstuurd.
-          </p>
         </section>
       ) : (
         <div className="registration-layout">
@@ -816,7 +800,6 @@ export function Registration({ courseId }: { courseId: string }) {
           <section className="registration-box">
             <div className="eyebrow">LEUK DAT JE MEE WILT DOEN</div>
             <h2>Zet de eerste stap.</h2>
-            <p>Een paar gegevens, en je bent erbij.</p>
             <form onSubmit={submit}>
               <label className="field">
                 Kies een demodeelnemer
@@ -872,9 +855,6 @@ export function Registration({ courseId }: { courseId: string }) {
               <button className="button" type="submit">
                 Ik doe mee <ArrowUpRight size={18} />
               </button>
-              <p className="fine">
-                Geen echte inschrijving, e-mail of externe gegevensverwerking.
-              </p>
             </form>
           </section>
         </div>

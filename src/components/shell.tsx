@@ -21,6 +21,9 @@ import {
   House,
   Flag,
   CircleHelp,
+  Radio,
+  Sparkles,
+  UserPlus,
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { personas, Role } from "@/lib/model";
@@ -42,6 +45,15 @@ const staffNav = [
   },
   { label: "Regio’s", href: "/hub/regios", icon: MapPin },
 ];
+const shortLabels: Record<string, string> = {
+  "/mijn": "Home",
+  "/mijn/portfolio": "Leerreis",
+  "/mijn/activiteiten": "Ontdek",
+  "/mijn/reis": "Momenten",
+  "/coach": "Vandaag",
+  "/coach/activiteiten": "Activiteiten",
+  "/coach/events": "Helpen",
+};
 export function Shell({ children }: { children: ReactNode }) {
   const s = useStore();
   const path = usePathname();
@@ -164,10 +176,15 @@ export function Shell({ children }: { children: ReactNode }) {
         <div className="sidebar-bottom">
           <div className="sidebar-note">
             <Nebula className="sidebar-nebula" />
-            <span className="status-dot" /> Eén netwerk. Meer perspectief.
-            <p>Iedere stap telt. Samen brengen we mensen in beweging.</p>
+            {(s.role === "national" || s.role === "regional") && (
+              <Link href="/live" onClick={() => setMenu(false)}>
+                <span className="status-dot" /> Live verbonden
+                <ArrowUpRight size={14} />
+              </Link>
+            )}
             <Link href="/hub/toekomst" onClick={() => setMenu(false)}>
-              De toekomst van Life Goals <ArrowUpRight size={14} />
+              <Sparkles size={13} /> Wat we kunnen bouwen
+              <ArrowUpRight size={14} />
             </Link>
           </div>
           <button className="quiet" onClick={() => setHelp(true)}>
@@ -214,17 +231,28 @@ export function Shell({ children }: { children: ReactNode }) {
         <main id="content">{children}</main>
         <footer>
           <span>Conceptdemo — alle gegevens zijn fictief.</span>
-          <span>Met sport begint er meer.</span>
+          <span>Never offside.</span>
         </footer>
       </div>
+      {(s.role === "participant" || s.role === "coach") && (
+        <nav className="tabbar" aria-label="Snelmenu">
+          {nav.map(({ href, icon: Icon }) => (
+            <Link
+              key={href}
+              href={href}
+              className={current?.href === href ? "active" : ""}
+            >
+              <Icon size={21} />
+              <span>{shortLabels[href]}</span>
+            </Link>
+          ))}
+        </nav>
+      )}
       {roles && (
         <Modal
           title="Bekijk het door een andere bril"
           close={() => setRoles(false)}
         >
-          <p className="muted">
-            Dezelfde mensen. Dezelfde voortgang. Een omgeving die bij je past.
-          </p>
           <div className="persona-list">
             {personas.map((p) => (
               <button
@@ -262,19 +290,15 @@ export function Shell({ children }: { children: ReactNode }) {
                 ))}
             </select>
           </label>
-          <p className="fine">
-            Rolwisseling is een simulatie. Er is geen echte aanmelding of
-            beveiligde toegang.
-          </p>
+          <Link className="new-participant" href="/start">
+            <UserPlus size={18} /> Nieuwe deelnemer aanmelden
+            <ArrowUpRight size={16} />
+          </Link>
         </Modal>
       )}
       {reset && (
         <Modal title="Opnieuw beginnen?" close={() => setReset(false)}>
-          <p>
-            Alle wijzigingen in deze browser worden vervangen door de fictieve
-            beginstand. De 36 deelnemers en hun oorspronkelijke activiteiten
-            komen terug.
-          </p>
+          <p>Alle wijzigingen gaan terug naar de beginstand.</p>
           <div className="form-actions">
             <button
               className="button secondary"
@@ -298,20 +322,13 @@ export function Shell({ children }: { children: ReactNode }) {
       {help && (
         <Modal title="Een rondje door Life Goals" close={() => setHelp(false)}>
           <ol className="guide-list">
-            <li>Maak als coördinator een opleiding en open de aanmeldlink.</li>
-            <li>Vink als opleider een portfolio-onderdeel af.</li>
-            <li>Registreer als coach de aanwezigheid bij Samen voetballen.</li>
-            <li>
-              Bekijk als Samira je leerreis en meld je aan als vrijwilliger.
-            </li>
-            <li>Bekijk als landelijk beheerder de actuele Monitor.</li>
+            <li>Coördinator: maak een opleiding en open de aanmeldlink.</li>
+            <li>Opleider: vink een portfolio-onderdeel af.</li>
+            <li>Coach: registreer aanwezigheid bij Samen voetballen.</li>
+            <li>Deelnemer: bekijk je leerreis en help mee bij een event.</li>
+            <li>Beheer: bekijk de Monitor of open Live verbonden.</li>
           </ol>
-          <Tag>Alles wordt lokaal in deze browser bewaard</Tag>
-          <p className="fine">
-            Nieuw aangemaakte opleidingen en wijzigingen delen niet automatisch
-            met andere apparaten. QR-codes openen de juiste URL; lokale
-            demogegevens blijven in deze browser.
-          </p>
+          <Tag>Alles blijft in deze browser</Tag>
         </Modal>
       )}
     </div>
@@ -341,10 +358,6 @@ export function Welcome() {
             <span className="reveal-line">vooruit.</span>
             <em className="reveal-line">Samen verbonden.</em>
           </h1>
-          <p>
-            Van dat eerste moment op het veld tot zelf anderen in beweging
-            brengen. Eén plek voor alles wat groeit.
-          </p>
           <div className="welcome-line">
             <span>01 — ONTMOETEN</span>
             <span>02 — GROEIEN</span>
@@ -370,11 +383,7 @@ export function Welcome() {
             <br />
             Vijf perspectieven.
           </h2>
-          <p className="welcome-intro">
-            Ervaar hoe een verbonden netwerk werkt.
-            <br />
-            Kies een rol en ontdek jouw omgeving.
-          </p>
+          <p className="welcome-intro">Kies een rol en kijk mee.</p>
           <div className="persona-list welcome-personas">
             {personas.map((p, i) => (
               <button
@@ -410,12 +419,18 @@ export function Welcome() {
               </button>
             ))}
           </div>
+          <Link className="welcome-new" href="/start">
+            <span>
+              <UserPlus size={20} />
+            </span>
+            <span>
+              <b>Nieuw bij Life Goals?</b>
+              <small>Maak in een minuut je account</small>
+            </span>
+            <ArrowUpRight size={20} />
+          </Link>
         </div>
-        <p className="fine">
-          Conceptdemo — alle gegevens zijn fictief.
-          <br />
-          Je kunt op elk moment van rol wisselen.
-        </p>
+        <p className="fine">Conceptdemo — alle gegevens zijn fictief.</p>
       </section>
     </div>
   );

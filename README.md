@@ -25,7 +25,10 @@ Gebruik één previewproces tegelijk op poort 3100. Er zijn geen omgevingsvariab
 
 ## Wat werkt
 
-- Welkomstscherm met vijf persona’s; rolwisseling blijft altijd bereikbaar.
+- Welkomstscherm met vijf persona’s; rolwisseling blijft altijd bereikbaar (op telefoon als bottom sheet).
+- Onboarding voor nieuwe deelnemers (`/start`): één vraag per scherm (naam, e-mail, inlogcode zonder wachtwoord) en een welkomstmoment. De code wordt gesimuleerd; er wordt niets verstuurd.
+- Live verbonden (`/live`): coach op een telefoonframe naast het landelijke dashboard. Een registratie telt direct mee. Beide frames delen de browseropslag; elk frame heeft een eigen rol via `?as=`.
+- Tabbalk onderin voor deelnemer en coach op telefoonbreedte.
 - Landelijk overzicht en een Amsterdamse coördinatoromgeving.
 - Deelnemers zoeken en filteren, meerdere rollen binnen één identiteit, gekoppelde profielen en een tijdlijn.
 - Opleidingen aanmaken met programma, regio, data, trainer, capaciteit, locatie, beschrijving en optionele WhatsApp-uitnodigingslink.

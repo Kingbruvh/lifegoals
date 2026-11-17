@@ -18,8 +18,11 @@ interface Store {
   personId: string;
   ready: boolean;
   notice: string;
+  /** True inside the live split-screen: role is per frame, never persisted. */
+  embedded: boolean;
   setRole: (r: Role) => void;
   setPersonId: (id: string) => void;
+  signUp: (name: string, email: string) => string;
   notify: (s: string) => void;
   reset: () => void;
   addCourse: (c: Omit<Course, "id">) => string;
@@ -51,7 +54,16 @@ export function Provider({ children }: { children: ReactNode }) {
   const [personId, setPersonId] = useState("p0");
   const [ready, setReady] = useState(false);
   const [notice, notify] = useState("");
+  const [embedded, setEmbedded] = useState(false);
+  const embeddedRef = useRef(false);
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const as = params.get("as");
+    const isEmbedded =
+      !!as &&
+      ["national", "regional", "trainer", "coach", "participant"].includes(as);
+    embeddedRef.current = isEmbedded;
+    setEmbedded(isEmbedded);
     try {
       const raw = localStorage.getItem(KEY);
       if (raw) {
@@ -61,7 +73,7 @@ export function Provider({ children }: { children: ReactNode }) {
           setData(parsed);
         } else notify("Oude demogegevens zijn vervangen door de beginstand.");
       }
-      const r = localStorage.getItem(KEY + "-role");
+      const r = isEmbedded ? as : localStorage.getItem(KEY + "-role");
       if (
         r &&
         ["national", "regional", "trainer", "coach", "participant"].includes(r)
@@ -82,6 +94,7 @@ export function Provider({ children }: { children: ReactNode }) {
           if (valid(d)) {
             ref.current = d;
             setData(d);
+            if (embeddedRef.current) notify("Live bijgewerkt");
           }
         } catch {
           /* retain valid in-memory data */
@@ -110,6 +123,7 @@ export function Provider({ children }: { children: ReactNode }) {
     }
   }
   function persist(key: string, value: string) {
+    if (embeddedRef.current) return;
     try {
       localStorage.setItem(KEY + key, value);
     } catch {
@@ -123,6 +137,39 @@ export function Provider({ children }: { children: ReactNode }) {
     ready,
     notice,
     notify,
+    embedded,
+    signUp: (name, email) => {
+      const clean = email.toLowerCase().trim();
+      if (!name.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(clean))
+        throw new Error("Vul je naam en een geldig e-mailadres in.");
+      const existing = ref.current.people.find((p) => p.email === clean);
+      const pid = existing?.id || id();
+      if (!existing)
+        commit((d) => {
+          d.people.push({
+            id: pid,
+            name: name.trim(),
+            email: clean,
+            region: "Amsterdam",
+            roles: ["Deelnemer"],
+            joined: today(),
+            eligible: true,
+          });
+          d.journey.push({
+            id: id(),
+            personId: pid,
+            date: today(),
+            title: "Welkom bij Life Goals",
+            detail: "Account aangemaakt",
+            kind: "activity",
+          });
+        });
+      setPersonId(pid);
+      persist("-person", pid);
+      setRole("participant");
+      persist("-role", "participant");
+      return pid;
+    },
     setRole: (r) => {
       setRole(r);
       persist("-role", r);

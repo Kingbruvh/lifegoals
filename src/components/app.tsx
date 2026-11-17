@@ -11,6 +11,8 @@ import { People, Profile, Journey } from "./people";
 import { Activities, ActivityDetail, CoachHome, Events } from "./activities";
 import { PersonalHome, Portfolio, Discover } from "./personal";
 import { Empty, Heading } from "./ui";
+import { Onboarding } from "./onboarding";
+import { LiveSplit } from "./live";
 export default function App() {
   const path = usePathname();
   const s = useStore();
@@ -23,6 +25,8 @@ export default function App() {
       </div>
     );
   if (path === "/") return <Welcome />;
+  if (path === "/start") return <Onboarding />;
+  if (path === "/live") return <LiveSplit />;
   if (parts[0] === "aanmelden")
     return <Registration courseId={parts[1] || ""} />;
   const required: Role | undefined =
@@ -43,10 +47,7 @@ export default function App() {
   if (!accessible)
     view = (
       <div className="card access-card">
-        <Heading
-          title="Een ander perspectief"
-          subtitle="Deze pagina hoort bij een andere demo-omgeving. Wissel van rol om verder te kijken."
-        />
+        <Heading title="Een ander perspectief" />
         <button className="button" onClick={() => s.setRole(required!)}>
           Bekijk als {personas.find((p) => p.id === required)!.title}
         </button>
@@ -81,11 +82,7 @@ export default function App() {
   else if (path === "/mijn/reis")
     view = (
       <>
-        <Heading
-          eyebrow="JOUW VERHAAL"
-          title="Kijk hoe ver je al bent."
-          subtitle="De ontmoetingen, de ervaringen en de stappen die je hebt gezet."
-        />
+        <Heading eyebrow="JOUW VERHAAL" title="Mijn momenten" />
         <section className="card journey-page">
           <Journey personId={s.personId} />
         </section>
@@ -104,9 +101,9 @@ export default function App() {
       <Shell>
         <motion.div
           key={path}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.22 }}
+          transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
         >
           {view}
         </motion.div>

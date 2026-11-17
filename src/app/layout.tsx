@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Provider } from "@/lib/store";
 import "./globals.css";
 import "./brand.css";
+import "./experience.css";
 export const metadata: Metadata = {
   title: "Life Goals Hub — Samen vooruit",
   description:

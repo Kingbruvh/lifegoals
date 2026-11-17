@@ -27,6 +27,7 @@ import { useStore } from "@/lib/store";
 import { Scope, regions, metrics, dateLabel, progress } from "@/lib/model";
 import {
   Avatar,
+  CountUp,
   Heading,
   Nebula,
   SectionTitle,
@@ -149,9 +150,8 @@ export function Dashboard() {
   return (
     <>
       <Heading
-        eyebrow="DINSDAG 3 NOVEMBER 2026 · DEMOWEEK"
+        eyebrow="DINSDAG 3 NOVEMBER"
         title={`Goedemorgen, ${role === "regional" ? "Eva" : "Noor"}`}
-        subtitle="Mooi dat je er bent. Dit is wat er beweegt in jouw netwerk."
         action={
           <RegionSelect
             value={scope}
@@ -169,20 +169,13 @@ export function Dashboard() {
             <br />
             Groot verschil.
           </h2>
-          <p>
-            Achter ieder getal zit een mens.
-            <br />
-            Maak vandaag ruimte voor een volgende stap.
-          </p>
+          <p>Achter ieder getal zit een mens.</p>
           <Link href="/hub/deelnemers/p0">
             Ontdek Samira’s verhaal <ArrowUpRight size={17} />
           </Link>
         </div>
         <div className="hero-image">
           <img src="/sport.jpg" alt="Een sportieve ontmoeting bij Life Goals" />
-          <span className="image-caption">
-            <span className="status-dot" /> Sport verbindt. Iedereen doet mee.
-          </span>
         </div>
       </div>
       <div className="stats-grid">
@@ -205,9 +198,9 @@ export function Dashboard() {
           icon={<ActivityIcon size={17} />}
         />
         <Stat
-          label="Aanwezigheid"
-          value={`${m.rate}%`}
-          note={`${m.present} sportmomenten bijgewoond`}
+          label="Sportmomenten"
+          value={m.present}
+          note={`${m.rate}% aanwezigheid`}
           icon={<CheckCheck size={17} />}
           highlight
         />
@@ -215,46 +208,40 @@ export function Dashboard() {
       <div className="dashboard-grid">
         <section className="card chart-card">
           <SectionTitle
-            title="Samen steeds in beweging"
-            subtitle="Aanwezigheid bij sportactiviteiten · per week"
+            title="Aanwezigheid per week"
             href="/hub/monitor"
             label="Naar de Monitor"
           />
           <div className="chart-summary">
-            <b>{m.present}</b>
+            <b>
+              <CountUp value={m.present} />
+            </b>
             <span>bijgewoonde sportmomenten</span>
             <Tag>Laatste 7 weken</Tag>
           </div>
           <ParticipationChart scope={scope} />
-          <p className="fine">
-            De huidige demoweek is nog niet volledig geregistreerd.
-          </p>
         </section>
         <section className="card attention-card">
-          <SectionTitle title="Even aandacht voor" />
+          <SectionTitle title="Aandacht nodig" />
           <div className="attention-icon">
             <CheckCheck size={24} />
           </div>
           <h3>
-            {attention.length} deelnemers
+            {attention.length} dossiers
             <br />
-            een stap verder helpen
+            missen nog iets
           </h3>
-          <p>
-            Een startdocument of ander onderdeel ontbreekt nog. Samen maken we
-            de administratie compleet.
-          </p>
           <Link className="text-link" href="/hub/opleidingen">
-            Bekijk de opleidingen <ArrowRight size={16} />
+            Bekijk <ArrowRight size={16} />
           </Link>
           <div className="attention-bottom">
             <span className="status-dot" />
-            {m.ready} dossiers administratief op orde
+            {m.ready} dossiers op orde
           </div>
         </section>
         <section className="card">
           <SectionTitle
-            title="Binnenkort op het veld"
+            title="Deze week op het veld"
             href="/hub/activiteiten"
           />
           <div className="activity-list">
@@ -319,11 +306,7 @@ export function Dashboard() {
         </section>
       </div>
       <section className="card recent-card">
-        <SectionTitle
-          title="De nieuwste stappen in het netwerk"
-          subtitle="Iedere aanmelding is een nieuw begin"
-          href="/hub/deelnemers"
-        />
+        <SectionTitle title="Nieuwste aanmeldingen" href="/hub/deelnemers" />
         <div className="recent-grid">
           {[...m.enrollments]
             .sort((a, b) => b.date.localeCompare(a.date))
@@ -363,9 +346,8 @@ export function Monitor() {
   return (
     <>
       <Heading
-        eyebrow="INZICHT DAT VERBINDT"
+        eyebrow="INZICHT"
         title="Life Goals Monitor"
-        subtitle="Een helder beeld van deelname, ontwikkeling en betrokkenheid."
         action={
           <RegionSelect
             value={scope}
@@ -374,10 +356,6 @@ export function Monitor() {
           />
         }
       />
-      <div className="notice-band">
-        <span className="status-dot" /> Fictieve voorbeeldgegevens · tellingen
-        volgen live de wijzigingen in deze demo.
-      </div>
       <div className="stats-grid">
         <Stat
           label="Unieke deelnemers"
@@ -406,20 +384,11 @@ export function Monitor() {
       </div>
       <div className="two-columns">
         <section className="card">
-          <SectionTitle
-            title="Deelname door de tijd"
-            subtitle="Aantal bijgewoonde sportmomenten per week"
-          />
+          <SectionTitle title="Deelname per week" />
           <ParticipationChart scope={scope} />
-          <p className="fine">
-            De laatste week is nog in uitvoering. Geen prognose of effectmeting.
-          </p>
         </section>
         <section className="card">
-          <SectionTitle
-            title="Van aanmelden naar afronden"
-            subtitle="Actuele inschrijvingen in het netwerk"
-          />
+          <SectionTitle title="Van aanmelden naar afronden" />
           {(["Aangemeld", "Deelnemend", "Afgerond", "Gestopt"] as const).map(
             (status, i) => {
               const count = m.enrollments.filter(
@@ -448,14 +417,10 @@ export function Monitor() {
               );
             },
           )}
-          <p className="fine">Eén persoon kan meerdere opleidingen volgen.</p>
         </section>
       </div>
       <section className="card">
-        <SectionTitle
-          title="Dichtbij, in elke regio"
-          subtitle="Vergelijkbare tellingen, vanuit dezelfde gegevens"
-        />
+        <SectionTitle title="Per regio" />
         <div className="table-scroll">
           <table>
             <thead>
@@ -497,26 +462,16 @@ export function Monitor() {
       </section>
       <div className="monitor-bottom">
         <section className="card sample-impact">
-          <Tag>FICTIEVE MONITORINGRECORDS</Tag>
-          <h2>
-            Ruimte voor het verhaal
-            <br />
-            achter de cijfers.
-          </h2>
+          <Tag>VOORBEELDRECORDS</Tag>
+          <h2>Het verhaal achter de cijfers.</h2>
           <div className="impact-number">
             {connected}
             <span>van {monitored.length} voorbeeldrecords</span>
           </div>
-          <p>
-            Illustratief geregistreerd: nieuwe mensen ontmoet. Dit is geen
-            gemeten Life Goals resultaat of aangetoond effect van sport.
-          </p>
+          <p>Nieuwe mensen ontmoet · voorbeeld, geen effectmeting.</p>
         </section>
         <section className="card">
-          <SectionTitle
-            title="Administratie met overzicht"
-            subtitle="Voorbeeldstatussen, geen externe koppelingen"
-          />
+          <SectionTitle title="Administratie" />
           <div className="large-row">
             <CheckCheck />
             <span>Dossiers op orde</span>
@@ -537,11 +492,6 @@ export function Monitor() {
               %
             </b>
           </div>
-          <p className="fine">
-            Kantar, Verian en digitale ondertekening zijn alleen statusvelden.
-            Er worden geen vragenlijsten verstuurd of subsidiegegevens
-            geëxporteerd.
-          </p>
         </section>
       </div>
     </>
@@ -551,11 +501,7 @@ export function Regions() {
   const { data } = useStore();
   return (
     <>
-      <Heading
-        eyebrow="HET LIFE GOALS NETWERK"
-        title="Lokaal sterk. Samen verder."
-        subtitle="Drie fictieve regio’s, verbonden door sport."
-      />
+      <Heading eyebrow="HET NETWERK" title="Regio’s" />
       <div className="three-columns">
         {regions.map((r, i) => {
           const m = metrics(data, r);
@@ -564,11 +510,6 @@ export function Regions() {
               <span className="region-number">0{i + 1}</span>
               <MapPin size={30} />
               <h2>{r}</h2>
-              <p>
-                {i === 0
-                  ? "De volledige demoreis komt hier samen."
-                  : "Een aanvullend perspectief op het netwerk."}
-              </p>
               <div className="region-counts">
                 <div>
                   <b>{m.people.length}</b>
@@ -592,11 +533,7 @@ export function Regions() {
 export function Future() {
   return (
     <>
-      <Heading
-        eyebrow="EEN MOGELIJKE VOLGENDE STAP"
-        title="Gebouwd om mee te groeien."
-        subtitle="Een verbonden basis opent nieuwe mogelijkheden. Dit zijn ideeën voor later."
-      />
+      <Heading eyebrow="VOLGENDE STAP" title="Gebouwd om mee te groeien" />
       <div className="future-hero">
         <ChartNoAxesCombined size={36} />
         <h2>
@@ -604,25 +541,21 @@ export function Future() {
           <br />
           Morgen meer mogelijkheden.
         </h2>
-        <p>
-          De huidige demo verbindt mensen, opleidingen, activiteiten en
-          vrijwilligerswerk. De richting voor verdere ontwikkeling bepalen we
-          samen.
-        </p>
+        <p>Eén basis voor mensen, opleidingen, activiteiten en events.</p>
       </div>
       <div className="three-columns">
         {[
           [
             "Leren & ontwikkelen",
-            "Uitgebreide digitale leermiddelen, verdiepende vragenlijsten en aanvullende regionale programma’s.",
+            "Digitale leermiddelen, vragenlijsten en regionale programma’s.",
           ],
           [
             "Minder administratie",
-            "Rapportages, verdere Verian-procesondersteuning en vrijwilligers- en onkostenadministratie.",
+            "Rapportages, Verian-ondersteuning en vrijwilligersadministratie.",
           ],
           [
             "Blijven verbinden",
-            "Website-integratie en nieuwe manieren om deelnemers betrokken te houden.",
+            "Website-koppeling en nieuwe manieren om betrokken te blijven.",
           ],
         ].map(([title, copy]) => (
           <section className="card" key={title}>
@@ -632,10 +565,7 @@ export function Future() {
           </section>
         ))}
       </div>
-      <p className="notice-band">
-        Deze ideeën zijn niet gebouwd en vormen geen toezegging over de
-        afgesproken eerste ontwikkelfase.
-      </p>
+      <p className="notice-band">Ideeën voor later, geen toezegging.</p>
     </>
   );
 }

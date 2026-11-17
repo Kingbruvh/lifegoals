@@ -42,11 +42,7 @@ export function People() {
   );
   return (
     <>
-      <Heading
-        eyebrow="MENSEN MAKEN HET VERSCHIL"
-        title="Iedereen in beeld"
-        subtitle="Eén persoon, één verhaal. Ook als iemand meerdere rollen heeft."
-      />
+      <Heading eyebrow="MENSEN MAKEN HET VERSCHIL" title="Iedereen in beeld" />
       <div className="list-toolbar">
         <label className="search">
           <Search size={18} />
@@ -189,9 +185,7 @@ export function Journey({ personId }: { personId: string }) {
       <div className="journey-intro">
         <Flag size={20} />
         <p>
-          Geen grote sprongen nodig.
-          <br />
-          <b>Iedere stap is er één.</b>
+          <b>Iedere stap telt.</b>
         </p>
       </div>
       {entries.map((e, i) => (
@@ -308,12 +302,9 @@ export function Profile({ id }: { id: string }) {
             <SectionTitle title="Administratieve aandacht" />
             <p>
               {es.some((e) => e.tasks.some((t) => t === "missing"))
-                ? "Er ontbreken nog onderdelen. Open de opleiding om samen de checklist bij te werken."
-                : "Geen ontbrekende onderdelen. Open de opleiding voor alle statussen."}
+                ? "Er ontbreken nog onderdelen."
+                : "Alles is compleet."}
             </p>
-            <small className="muted">
-              Fictieve statusregistratie · geen externe koppelingen.
-            </small>
           </section>
         </aside>
         <section className="card">
