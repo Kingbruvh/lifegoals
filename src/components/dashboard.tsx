@@ -25,7 +25,15 @@ import {
 } from "recharts";
 import { useStore } from "@/lib/store";
 import { Scope, regions, metrics, dateLabel, progress } from "@/lib/model";
-import { Avatar, Heading, SectionTitle, Stat, Tag, Progress } from "./ui";
+import {
+  Avatar,
+  Heading,
+  Nebula,
+  SectionTitle,
+  Stat,
+  Tag,
+  Progress,
+} from "./ui";
 export function RegionSelect({
   value,
   onChange,
@@ -86,11 +94,11 @@ export function ParticipationChart({ scope }: { scope: Scope }) {
         >
           <defs>
             <linearGradient id="coral" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#d53b45" stopOpacity={0.16} />
+              <stop offset="0%" stopColor="#d53b45" stopOpacity={0.22} />
               <stop offset="100%" stopColor="#d53b45" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid vertical={false} stroke="#efefed" />
+          <CartesianGrid vertical={false} stroke="#ecebe6" />
           <XAxis
             dataKey="name"
             axisLine={false}
@@ -154,6 +162,7 @@ export function Dashboard() {
       />
       <div className="dashboard-hero">
         <div>
+          <Nebula className="hero-nebula" />
           <Tag tone="cream">SAMEN IN BEWEGING</Tag>
           <h2>
             Kleine stappen.
@@ -427,10 +436,10 @@ export function Monitor() {
                       style={{
                         width: `${(count / Math.max(1, m.enrollments.length)) * 100}%`,
                         background: [
-                          "#b2b6ab",
+                          "#bdbab3",
                           "#d53b45",
-                          "#698977",
-                          "#b6a190",
+                          "#252525",
+                          "#d14c33",
                         ][i],
                       }}
                     />

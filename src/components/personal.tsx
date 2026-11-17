@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { dateLabel, progress } from "@/lib/model";
-import { Empty, Heading, Progress, SectionTitle, Tag } from "./ui";
+import { Empty, Heading, Nebula, Progress, SectionTitle, Tag } from "./ui";
 import { TaskChecklist } from "./courses";
 import { Journey } from "./people";
 import { Events } from "./activities";
@@ -49,6 +49,7 @@ export function PersonalHome() {
       />
       <section className="personal-hero">
         <div>
+          <Nebula className="hero-nebula" />
           <Tag tone="cream">IEDERE STAP TELT</Tag>
           <h2>
             Er begint iets moois
@@ -231,7 +232,7 @@ export function Portfolio() {
         <div
           className="progress-ring"
           style={{
-            background: `conic-gradient(#d53b45 ${progress(e)}%,#e6e3d9 0)`,
+            background: `conic-gradient(#d53b45 ${progress(e)}%,#ecebe6 0)`,
           }}
         >
           <span>

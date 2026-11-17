@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useEffect, useRef, useId } from "react";
+import { ReactNode, useEffect, useRef, useId, useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Check, ChevronRight, X } from "lucide-react";
 import { initials } from "@/lib/model";
@@ -17,12 +17,46 @@ export function Logo({ light = false }: { light?: boolean }) {
     </Link>
   );
 }
+/** "Nebula" — the brandbook's brush-stroke element. Coloured via currentColor. */
+export function Nebula({ className = "" }: { className?: string }) {
+  return <span className={`nebula ${className}`} aria-hidden="true" />;
+}
+/** Counts a number (with optional suffix such as "%") up from zero once. */
+export function CountUp({ value }: { value: string | number }) {
+  const match = String(value).match(/^(\d+)(.*)$/);
+  const target = match ? Number(match[1]) : 0;
+  const [shown, setShown] = useState(match ? 0 : target);
+  useEffect(() => {
+    if (!match) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(target);
+      return;
+    }
+    let frame = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / 900);
+      setShown(Math.round(target * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target]);
+  if (!match) return <>{value}</>;
+  return (
+    <>
+      {shown}
+      {match[2]}
+    </>
+  );
+}
 export function Avatar({ name, size = "" }: { name: string; size?: string }) {
   return (
     <span
       className={`avatar ${size}`}
       style={{
-        background: ["#f5e5df", "#e5ebe1", "#e2e9f1", "#f1e8d6"][
+        background: ["#f8e1e2", "#faf8db", "#ececea", "#f7e0d9"][
           name.length % 4
         ],
       }}
@@ -189,7 +223,9 @@ export function Stat({
         {label}
         <span>{icon}</span>
       </div>
-      <div className="stat-value">{value}</div>
+      <div className="stat-value">
+        <CountUp value={value} />
+      </div>
       <div className="stat-note">
         {highlight && <Check size={13} />} {note}
       </div>

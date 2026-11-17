@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { Scope, dateLabel } from "@/lib/model";
-import { Avatar, Empty, Heading, SectionTitle, Stat, Tag } from "./ui";
+import { Avatar, Empty, Heading, Nebula, SectionTitle, Stat, Tag } from "./ui";
 import { RegionSelect } from "./dashboard";
 export function Activities({ coach = false }: { coach?: boolean }) {
   const { data, role } = useStore();
@@ -264,6 +264,7 @@ export function CoachHome() {
       />
       {a && (
         <section className="coach-feature">
+          <Nebula className="hero-nebula" />
           <Tag tone="cream">JOUW EERSTVOLGENDE ACTIVITEIT</Tag>
           <h2>{a.title}</h2>
           <p>
@@ -388,6 +389,7 @@ export function Events({
                   {dateLabel(e.date)}
                   <small>2026</small>
                 </b>
+                <Nebula className="poster-nebula" />
               </div>
               <div className="event-content">
                 <div className="tags">

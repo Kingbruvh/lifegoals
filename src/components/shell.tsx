@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { personas, Role } from "@/lib/model";
-import { Avatar, Logo, Modal, Tag } from "./ui";
+import { Avatar, Logo, Modal, Nebula, Tag } from "./ui";
 const staffNav = [
   { label: "Overzicht", href: "/hub", icon: LayoutDashboard },
   { label: "Deelnemers", href: "/hub/deelnemers", icon: Users },
@@ -120,7 +120,7 @@ export function Shell({ children }: { children: ReactNode }) {
       )}
       <aside className={`sidebar ${menu ? "open" : ""}`}>
         <div className="sidebar-brand">
-          <Logo />
+          <Logo light />
           <button
             className="icon-button mobile-only"
             onClick={() => setMenu(false)}
@@ -163,6 +163,7 @@ export function Shell({ children }: { children: ReactNode }) {
         </nav>
         <div className="sidebar-bottom">
           <div className="sidebar-note">
+            <Nebula className="sidebar-nebula" />
             <span className="status-dot" /> Eén netwerk. Meer perspectief.
             <p>Iedere stap telt. Samen brengen we mensen in beweging.</p>
             <Link href="/hub/toekomst" onClick={() => setMenu(false)}>
@@ -328,6 +329,7 @@ export function Welcome() {
           alt="Samen sporten op het veld tijdens een Life Goals activiteit"
         />
         <div className="welcome-shade" />
+        <Nebula className="welcome-nebula" />
         <div className="welcome-brand">
           <Logo light />
           <Tag>HET DIGITALE ECOSYSTEEM</Tag>
@@ -335,9 +337,9 @@ export function Welcome() {
         <div className="welcome-copy">
           <div className="eyebrow">SPORT VOOR PERSPECTIEF</div>
           <h1>
-            Elke stap vooruit.
-            <br />
-            <em>Samen verbonden.</em>
+            <span className="reveal-line">Elke stap</span>
+            <span className="reveal-line">vooruit.</span>
+            <em className="reveal-line">Samen verbonden.</em>
           </h1>
           <p>
             Van dat eerste moment op het veld tot zelf anderen in beweging
@@ -352,6 +354,7 @@ export function Welcome() {
         <small className="photo-credit">
           Life Goals · beeld van stichtinglifegoals.nl
         </small>
+        <Ticker />
       </section>
       <section className="welcome-choose">
         <div className="welcome-top">
@@ -414,6 +417,21 @@ export function Welcome() {
           Je kunt op elk moment van rol wisselen.
         </p>
       </section>
+    </div>
+  );
+}
+/** Decorative pay-off band: "Never offside" and the three G's (brandbook). */
+export function Ticker() {
+  const words = ["Never offside", "Gemeenschap", "Gezondheid", "Groei"];
+  return (
+    <div className="ticker" aria-hidden="true">
+      {[0, 1].map((r) => (
+        <div className="ticker-row" key={r}>
+          {[...words, ...words].map((w, i) => (
+            <span key={i}>{w}</span>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

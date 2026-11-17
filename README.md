@@ -1,6 +1,8 @@
 # Life Goals Hub
 
-Een werkende, verbonden conceptdemo voor Stichting Life Goals. **Alle gegevens zijn fictief.** Gebouwd met Next.js App Router, TypeScript, Tailwind CSS, Lucide, Motion, Recharts en een lokale, getypeerde store.
+Een werkende, verbonden conceptdemo voor Stichting Life Goals. **Alle gegevens zijn fictief.** Gebouwd met Next.js App Router, TypeScript, Tailwind CSS, Lucide, Motion, Recharts en een lokale, getypeerde store. De vormgeving volgt het Life Goals Brandbook 2024 (zie [docs/BRAND.md](docs/BRAND.md)).
+
+Live: https://lifegoals-wheat.vercel.app (Vercel-project `lifegoals`, gekoppeld aan `main`; elke push naar `main` publiceert opnieuw).
 
 ## Starten
 
@@ -52,7 +54,8 @@ De huidige opslag is bedoeld voor één presenter, niet voor gelijktijdige samen
 - `src/lib/store.tsx`: opslagadapter en centrale mutaties; UI-componenten veranderen de dataset nooit rechtstreeks.
 - `src/components/`: herbruikbare onderdelen en taakgerichte schermen.
 - `src/app/[[...slug]]/page.tsx`: App Router-ingang; ondersteunt diepe links en herladen, ook voor lokaal aangemaakte opleidingen.
-- `src/app/globals.css`: responsive ontwerp, font, focusstijlen en reduced-motion ondersteuning.
+- `src/app/globals.css`: basisstijlen, merk-tokens, responsive ontwerp, fonts, focusstijlen en reduced-motion ondersteuning.
+- `src/app/brand.css`: merklaag volgens het Brandbook 2024 (typografie, Charcoal-navigatie, Nebula, animaties).
 
 Een toekomstige backend kan de centrale store-operaties vervangen. Echte autorisatie, multi-user transacties, servervalidatie, privacy-afspraken en integraties zijn nog afzonderlijk te ontwerpen.
 
@@ -88,6 +91,6 @@ npx vercel login
 npx vercel --prod
 ```
 
-Er is in deze sessie geen Vercel-login aangetroffen; de productiebuild is wel lokaal geverifieerd. Publiceer geen echt deelnemersbestand in deze demo.
+Publiceer geen echt deelnemersbestand in deze demo.
 
 Zie [de 15-minutenpresentatie](docs/PRESENTATIEROUTE.md) en [bron- en ontwerpnotities](docs/BRAND.md).

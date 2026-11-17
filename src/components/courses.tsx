@@ -42,6 +42,7 @@ import {
   Empty,
   Go,
   Logo,
+  Nebula,
 } from "./ui";
 import { RegionSelect } from "./dashboard";
 export function CourseList({ trainer = false }: { trainer?: boolean }) {
@@ -101,6 +102,7 @@ export function CourseList({ trainer = false }: { trainer?: boolean }) {
                 <span>LIFE GOALS ACADEMIE</span>
                 <GraduationCap size={44} strokeWidth={1.3} />
                 <Tag>{c.region}</Tag>
+                <Nebula className="card-nebula" />
               </div>
               <div className="course-card-content">
                 <div className="course-status">
